@@ -37,6 +37,7 @@ async function init() {
         console.log("erro while creating admin")
     }
 }
+require("./routes/auth.route")(app)
 //step1: start the server
 app.listen(server_config.server_port, () => {
     console.log("server started at port number : ", server_config.server_port)
