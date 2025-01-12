@@ -32,6 +32,25 @@ const verifySignupBody = async (req,res,next)=>{
         })
     }
 }
+const verifySignInBody = async(req,res,next)=>{
+    try{
+     if(!req.body.email){
+      return res.status(400).send({
+        message:"email does not provided"
+      })
+     }
+     else if(!req.body.password){
+      return res.status(400).send({
+        message:"password is not provided"
+      })
+     }
+     next()
+    }
+    catch(err){
+      console.log(err)
+    }
+  }
 module.exports ={
-    verifySignupBody:verifySignupBody
+    verifySignupBody:verifySignupBody,
+    verifySignInBody:verifySignInBody
 }
