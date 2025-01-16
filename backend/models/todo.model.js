@@ -1,10 +1,14 @@
 const mongoose = require('mongoose');
-
+/**
+ * design schema for todos
+ * title: title of todo
+ * descriptin: desctiption of todo
+ * dueData:
+ */
 const todoSchema = new mongoose.Schema({
     title: {
         type: String,
-        required: true,
-        trim: true
+         trim: true
       },
       description: {
         type: String,
@@ -13,6 +17,7 @@ const todoSchema = new mongoose.Schema({
       },
       dueDate: {
         type: Date,
+        default:Date.now
        },
       status: {
         type: String,
@@ -29,8 +34,7 @@ const todoSchema = new mongoose.Schema({
       userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
-        required: true
-      }
+       }
 },{timestamps:true,versionKey:false});
 
 module.exports = mongoose.model("todo",todoSchema)

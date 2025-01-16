@@ -52,7 +52,7 @@ exports.signin = async (req,res)=>{
         })
        }
        //create the token
-       const token =jwt.sign({email:user.email},authConfig.secrate,{expiresIn:120})
+       const token =jwt.sign({userId:user.userId},authConfig.secrate,{expiresIn:1120})
        res.status(200).send({
         name:user.name,
          email:user.email,

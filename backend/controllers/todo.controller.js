@@ -1,31 +1,38 @@
+const mongoose = require("mongoose");
 const todo_model = require("../models/todo.model");
 
 exports.todoCreation = async (req, res) => {
     try {
-        const { title, description, dueDate, userId } = req.body;
+        const { title, description, dueDate, status } = req.body; // Accept `status` from the request body
 
-         
-        // Create the Todo using `create()`
+        // Validate the status, if provided
+        const validStatuses = ["pending", "in-progress", "completed"];
+        if (status && !validStatuses.includes(status)) {
+            return res.status(400).send({
+                message: "Invalid status. Valid options are 'pending', 'in-progress', or 'completed'."
+            });
+        }
+
+        // Create the Todo
         const todo_data = await todo_model.create({
             title,
             description,
             dueDate,
-            userId
+            status, // Add the status field
+            // userId
         });
 
-        // Prepare response object
-        const responseObject = {
-            title: todo_data.title,
-            description: todo_data.description,
-            dueDate: todo_data.dueDate,
-            createdAt: todo_data.createdAt,
-            updatedAt: todo_data.updatedAt
-        };
-
-        // Send successful response
+        // Return the response, including the status
         res.status(201).send({
             message: "Successfully created todo!",
-            data: responseObject
+            data: {
+                title: todo_data.title,
+                description: todo_data.description,
+                dueDate: todo_data.dueDate,
+                status: todo_data.status, // Include the status in the response
+                createdAt: todo_data.createdAt,
+                updatedAt: todo_data.updatedAt
+            }
         });
     } catch (err) {
         console.error(err);
