@@ -6,6 +6,11 @@ const verifySignupBody = async (req,res,next)=>{
             message:"provide the user name"
         })
     }
+    if(!req.body.userId){
+        return res.status(500).send({
+            message:"userId is required"
+        })
+    }
     if(!req.body.email){
         return res.status(500).send({
             message:"provide the user email" 
@@ -23,6 +28,12 @@ const verifySignupBody = async (req,res,next)=>{
             message:"failde email id allredy exist"
         })
     }
+    const userId = await user_model.findOne({userId:req.body.userId});
+    if(userId){
+        return res.status(500).send({
+            message:"failed! userId allredy exist"
+        })
+    }
     next()
     }
     catch(err){
@@ -34,9 +45,9 @@ const verifySignupBody = async (req,res,next)=>{
 }
 const verifySignInBody = async(req,res,next)=>{
     try{
-     if(!req.body.email){
+     if(!req.body.userId){
       return res.status(400).send({
-        message:"email does not provided"
+        message:"userId does not provided"
       })
      }
      else if(!req.body.password){

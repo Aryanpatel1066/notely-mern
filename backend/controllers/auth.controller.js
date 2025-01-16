@@ -9,14 +9,15 @@ exports.signup=async (req,res)=>{
      //step2:read the userdata present in body
      const userData = {
         name:request_body.name,
+        userId:request_body.userId,
         email:request_body.email,
-        password:request_body.password,
-        password: bcrypt.hashSync(request_body.password,8)
+         password: bcrypt.hashSync(request_body.password,8)
      }
      const user_created = await user_model.create(userData);
      //step3: response back to user
            const res_obj ={
             name:user_created.name,
+            userId:user_created.password,
             email:user_created.email,
             password:bcrypt.hashSync(user_created.password,8),
             userType:user_created.userType,
@@ -38,10 +39,10 @@ exports.signup=async (req,res)=>{
 //controller for the signin
 exports.signin = async (req,res)=>{
     try{
-       const user = await user_model.findOne({email:req.body.email})
+       const user = await user_model.findOne({userId:req.body.userId})
        if(user == null){
         return res.status(404).send({
-            message:"email id is not vallid"
+            message:"userId is not vallid"
         })
        }
        const isPasswordValid =bcrypt.compareSync(req.body.password,user.password)
