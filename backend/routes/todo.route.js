@@ -8,8 +8,10 @@ app.post(
     todo_controller.todoCreation
 );
 app.get(
-    "/todoApp/api/v1/todo/:userId",  
+    "/todoApp/api/v1/todo/:userId",[auth_mw.verifyToken],  
     todo_controller.getAllTodo
 );
- app.put("/todoApp/api/v1/todo/:id",todo_controller.updateTodo)
+ app.put("/todoApp/api/v1/todo/:id",[auth_mw.verifyToken],todo_controller.updateTodo);
+
+ app.delete("/todoApp/api/v1/todo/:id",[auth_mw.verifyToken],todo_controller.deletedTodo)
 }

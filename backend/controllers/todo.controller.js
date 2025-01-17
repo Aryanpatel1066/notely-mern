@@ -118,3 +118,28 @@ exports.updateTodo = async (req, res) => {
     }
 };
 
+//controller for delet the todo
+
+exports.deletedTodo=async(req,res)=>{
+    try{
+        //step1: fetch the specific id to delete it
+    const {id} = req.params;
+    //step2: delete tod
+    const deletedTodo = await todo_model.findByIdAndDelete(id)
+    if(!deletedTodo){
+        return res.status(404).send({
+            message:"todo not foun or allredy deleted"
+        })
+    }
+    return res.status(200).send({
+        message:"todo was deleted",
+        data:deletedTodo
+    })
+    }
+    
+    catch(err){
+        return res.status(505).send({
+            message:"error while delete the todo"
+        })
+    }
+}
