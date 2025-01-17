@@ -1,11 +1,13 @@
-const mongoose = require("mongoose");
-const todo_model = require("../models/todo.model");
-
+const user_model = require("../models/user.model")
+const todo_model = require("../models/todo.model")
+const mongoose = require('mongoose')
 exports.todoCreation = async (req, res) => {
     try {
-        const { title, description, dueDate, status } = req.body; // Accept `status` from the request body
+        const userId = req.params.userId; // Extract `userId` from the URL
 
-        // Validate the status, if provided
+        const { title, description, dueDate, status } = req.body;
+
+        // Validate the status
         const validStatuses = ["pending", "in-progress", "completed"];
         if (status && !validStatuses.includes(status)) {
             return res.status(400).send({
@@ -13,32 +15,59 @@ exports.todoCreation = async (req, res) => {
             });
         }
 
-        // Create the Todo
-        const todo_data = await todo_model.create({
+        // Check if the user exists (optional, for validation)
+        const user = await user_model.findById(userId);
+        if (!user) {
+            return res.status(404).send({ message: "User not found" });
+        }
+
+        // Create and save the todo
+        const newTodo = await todo_model.create({
             title,
             description,
             dueDate,
-            status, // Add the status field
-            // userId
+            status,
+            userId, // Use userId from the URL
         });
 
-        // Return the response, including the status
         res.status(201).send({
-            message: "Successfully created todo!",
-            data: {
-                title: todo_data.title,
-                description: todo_data.description,
-                dueDate: todo_data.dueDate,
-                status: todo_data.status, // Include the status in the response
-                createdAt: todo_data.createdAt,
-                updatedAt: todo_data.updatedAt
-            }
+            message: "Todo successfully created!",
+            data: newTodo,
         });
     } catch (err) {
         console.error(err);
         res.status(500).send({
             message: "Error while creating todo",
-            error: err.message
+            error: err.message,
+        });
+    }
+};
+exports.getAllTodo = async (req, res) => {
+    try {
+        const { userId } = req.params; // Extract `userId` from the URL
+
+        // Validate the `userId`
+        if (!mongoose.Types.ObjectId.isValid(userId)) {
+            return res.status(400).send({ message: "Invalid userId" });
+        }
+
+        // Fetch all todos associated with the `userId`
+        const todos = await todo_model.find({ userId });
+
+        // Check if no todos are found
+        if (todos.length === 0) {
+            return res.status(404).send({ message: "No todos found for the given userId" });
+        }
+
+        res.status(200).send({
+            message: "Todos fetched successfully",
+            todos,
+        });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send({
+            message: "Error while fetching todos",
+            error: err.message,
         });
     }
 };
