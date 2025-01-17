@@ -71,3 +71,50 @@ exports.getAllTodo = async (req, res) => {
         });
     }
 };
+//controller for the update the specific todos item
+exports.updateTodo = async (req, res) => {
+    try {
+        // Step 1: Fetch the ID from the URL
+        const { id } = req.params;
+
+        
+
+        // Step 3: Extract updated data from request body
+        const updatedData = req.body;
+
+        // Step 4: Check if updatedData is not empty
+        if (!Object.keys(updatedData).length) {
+            return res.status(400).send({
+                message: "No data provided for update",
+            });
+        }
+
+        // Step 5: Find and update the Todo item
+        const updatedTodo = await todo_model.findByIdAndUpdate(
+            id,            // Filter by ID
+            updatedData,   // Update data
+            { new: true }  // Return the updated document
+        );
+
+        // Step 6: Handle case if Todo not found
+        if (!updatedTodo) {
+            return res.status(404).send({
+                message: "Todo not found",
+            });
+        }
+
+        // Step 7: Send the updated Todo item as a response
+        return res.status(200).send({
+            message: "Todo updated successfully",
+            data: updatedTodo,
+        });
+    } catch (err) {
+        // Step 8: Catch and send any server errors
+        console.error("Error updating Todo:", err);
+        return res.status(500).send({
+            message: "Error while updating the Todo",
+            error: err.message,
+        });
+    }
+};
+

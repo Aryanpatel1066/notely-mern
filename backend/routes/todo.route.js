@@ -11,5 +11,5 @@ app.get(
     "/todoApp/api/v1/todo/:userId",  
     todo_controller.getAllTodo
 );
- 
+ app.put("/todoApp/api/v1/todo/:id",todo_controller.updateTodo)
 }
