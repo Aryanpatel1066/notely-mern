@@ -11,7 +11,9 @@ exports.signup=async (req,res)=>{
         name:request_body.name,
         userId:request_body.userId,
         email:request_body.email,
-         password: bcrypt.hashSync(request_body.password,8)
+         password: bcrypt.hashSync(request_body.password,8),
+         userType: "user", // Default userType
+
      }
      const user_created = await user_model.create(userData);
      //step3: response back to user
