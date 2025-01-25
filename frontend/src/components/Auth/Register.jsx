@@ -1,6 +1,7 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom"
 import axios from "../../api"; // Axios instance with baseURL pointing to the backend
-
+import "./Register.css"
 function Register() {
     // State to hold form data
     const [formData, setFormData] = useState({
@@ -35,8 +36,11 @@ function Register() {
     };
 
     return (
+
         <div>
-            <h1>Register</h1>
+            <div className="dummyImage"></div>
+            <h1>Welcom to Onboard!</h1>
+            <p className="subHeading">let's help to meet up your tasks.</p>
             {message && (
                 <p style={{ color: isError ? "red" : "green" }}>{message}</p>
             )}
@@ -46,7 +50,7 @@ function Register() {
                     name="name"
                     value={formData.name}
                     onChange={handleChange}
-                    placeholder="Name"
+                    placeholder="Enter you full name"
                     required
                 />
                 <input
@@ -54,7 +58,7 @@ function Register() {
                     name="userId"
                     value={formData.userId}
                     onChange={handleChange}
-                    placeholder="User ID"
+                    placeholder=" Enter User ID"
                     required
                 />
                 <input
@@ -62,7 +66,7 @@ function Register() {
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
-                    placeholder="Email"
+                    placeholder="Enter your Email"
                     required
                 />
                 <input
@@ -70,10 +74,11 @@ function Register() {
                     name="password"
                     value={formData.password}
                     onChange={handleChange}
-                    placeholder="Password"
+                    placeholder="Enter your Password"
                     required
                 />
                 <button type="submit">Register</button>
+                <div className="subHeading">Already hav an account ? <Link className="link" to="/"> sign in</Link></div>
             </form>
         </div>
     );
