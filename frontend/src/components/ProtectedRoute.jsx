@@ -1,3 +1,5 @@
+import { Navigate } from "react-router-dom"; // ✅ Add this import
+
 const ProtectedRoute = ({ children }) => {
     const user = JSON.parse(localStorage.getItem("user"));
     console.log("User in ProtectedRoute:", user);

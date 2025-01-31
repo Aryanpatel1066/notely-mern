@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import "./ProfileSection.css";
 
 function ProfileSection() {
     const [userName, setUserName] = useState("");
@@ -15,10 +16,14 @@ function ProfileSection() {
     }, []);
 
     return (
-        <div>
+        <div className="upperProfileSection">
+            <div className="updateProfilePicture">
+                <i className="fas fa-edit"></i>
+            </div>
             <h2>Welcome, {userName || "Guest"}!</h2>
         </div>
     );
 }
 
 export default ProfileSection;
+ 
