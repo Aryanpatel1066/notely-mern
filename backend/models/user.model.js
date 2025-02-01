@@ -5,10 +5,6 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    userId:{
-        type:String,
-        unique:true
-    },
     email: {
         type: String,
         required: true,
@@ -20,10 +16,6 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    userType: {
-        type: String,
-        enum: ["admin", "user"],
-        default: "user"
-    },
+
 },{timestamps:true,versionKey:false});
-module.exports = mongoose.model("user",userSchema);
+module.exports = mongoose.model("usar",userSchema);

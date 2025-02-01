@@ -1,21 +1,29 @@
-//add the middelewear logic for todo
-
-const checkTodoBody = async(req,res,next)=>{
-    try{
-    if(!req.body.description){
-        return res.status(500).send({
-            message:"the todo description is required"
-        })
+const checkTodoBody = async (req, res, next) => {
+    try {
+      const { title, description } = req.body;
+  
+      if (!title || title.trim() === "") {
+        return res.status(400).send({
+          message: "The todo title is required",
+        });
+      }
+  
+      if (!description || description.trim() === "") {
+        return res.status(400).send({
+          message: "The todo description is required",
+        });
+      }
+  
+      next(); // Proceed to the next middleware or route handler
+    } catch (err) {
+      console.error("Error while checking Todo body:", err);
+      return res.status(500).send({
+        message: "Error while checking Todo body",
+      });
     }
-    next()
-    }
-    catch(err){
-        return res.status(504).send({
-            message:"error wile checking mw body"
-        })
-    }
-}
-
-module.exports = {
-checkTodoBody:checkTodoBody
-}
+  };
+  
+  module.exports = {
+    checkTodoBody,
+  };
+  

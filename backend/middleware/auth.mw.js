@@ -1,108 +1,121 @@
-const user_model = require("../models/user.model")
+const user_model = require("../models/user.model");
 const jwt = require("jsonwebtoken");
-const auth_config= require("../configs/auth.config")
-const verifySignupBody = async (req,res,next)=>{
-    try{
-    if(!req.body.name){
-        return res.status(500).send({
-            message:"provide the user name"
-        })
-    }
-    if(!req.body.userId){
-        return res.status(500).send({
-            message:"userId is required"
-        })
-    }
-    if(!req.body.email){
-        return res.status(500).send({
-            message:"provide the user email" 
-        })
-    }
-    if(!req.body.password){
-        return res.status(500).send({
-            message:"provide the user password"
-        })
-    }
-    //check if same email id 
-    const userEmail = await user_model.findOne({email:req.body.email});
-    if(userEmail){
-       return res.status(500).send({
-            message:"failde email id allredy exist"
-        })
-    }
-    const userId = await user_model.findOne({userId:req.body.userId});
-    if(userId){
-        return res.status(500).send({
-            message:"failed! userId allredy exist"
-        })
-    }
-    next()
-    }
-    catch(err){
-        console.log(err);
-        res.status(500).send({
-            message:"error while verifying signup body"
-        })
-    }
-}
-const verifySignInBody = async(req,res,next)=>{
-    try{
-     if(!req.body.userId){
+const auth_config = require("../configs/auth.config");
+
+// Middleware to verify the signup body (check if required fields are provided)
+const verifySignupBody = async (req, res, next) => {
+  try {
+    // Validate required fields
+    const { name, email, password } = req.body;
+
+    if (!name) {
       return res.status(400).send({
-        message:"userId does not provided"
-      })
-     }
-     else if(!req.body.password){
+        message: "User name is required",
+      });
+    }
+
+    
+
+    if (!email) {
       return res.status(400).send({
-        message:"password is not provided"
-      })
-     }
-     next()
+        message: "Email is required",
+      });
     }
-    catch(err){
-      console.log(err)
+
+    if (!password) {
+      return res.status(400).send({
+        message: "Password is required",
+      });
     }
+
+    // Check if email already exists in the database
+    const userEmail = await user_model.findOne({ email: req.body.email });
+    if (userEmail) {
+      return res.status(400).send({
+        message: "Email ID already exists",
+      });
+    }
+
+   
+    next(); // Proceed to the next middleware or route handler
+  } catch (err) {
+    console.error("Error while verifying signup body:", err);
+    res.status(500).send({
+      message: "Internal server error during signup validation",
+    });
   }
-  const verifyToken = async (req, res, next) => {
-    try {
-      // Step 1: Check if the token is present in the header
-      const token = req.header("access-token-key");
-      if (!token) {
+};
+
+// Middleware to verify the signin body (check if userId and password are provided)
+const verifySignInBody = async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
+
+    if (!email) {
+      return res.status(400).send({
+        message: "email ID is required",
+      });
+    }
+
+    if (!password) {
+      return res.status(400).send({
+        message: "Password is required",
+      });
+    }
+
+    next(); // Proceed to the next middleware or route handler
+  } catch (err) {
+    console.error("Error while verifying signin body:", err);
+    res.status(500).send({
+      message: "Internal server error during signin validation",
+    });
+  }
+};
+
+// Middleware to verify the token (authenticate the user)
+const verifyToken = async (req, res, next) => {
+  try {
+    // Step 1: Get token from the header (custom header in this case)
+    const token = req.header("access-token-key");
+
+    // Step 2: If no token is provided
+    if (!token) {
+      return res.status(401).send({
+        message: "Unauthorized: No token found",
+      });
+    }
+
+    // Step 3: Verify the token using the secret
+    jwt.verify(token, auth_config.secrate, async (err, decoded) => {
+      if (err) {
         return res.status(401).send({
-          message: "Unauthorized: No token found",
+          message: "Unauthorized: Invalid or expired token",
         });
       }
-  
-      // Step 2: Verify the token
-      jwt.verify(token, auth_config.secrate, async (err, decoded) => {
-        if (err) {
-          return res.status(401).send({
-            message: "Unauthorized: Invalid token",
-          });
-        }
-  
-        // Step 3: Fetch the user from the database using the decoded token's ID
-        const user = await user_model.findOne({ userId: decoded.id });
-        if (!user) {
-          return res.status(401).send({
-            message: "Unauthorized: No user found for this token",
-          });
-        }
-  
-        // Step 4: Attach user information to the request object
-        req.user = user;
-        next(); // Proceed to the next middleware or route handler
-      });
-    } catch (error) {
-      console.error("Error in verifyToken middleware:", error);
-      res.status(500).send({
-        message: "Internal server error in token verification",
-      });
-    }
-  };
-  
-module.exports ={
-    verifySignupBody:verifySignupBody,
-    verifySignInBody:verifySignInBody,
-    verifyToken:verifyToken
-}
+
+      // Step 4: Check if the user exists based on the decoded userId
+      const user = await user_model.findOne({ userId: decoded.userId });
+      if (!user) {
+        return res.status(401).send({
+          message: "Unauthorized: No user found for this token",
+        });
+      }
+
+      // Step 5: Attach the user to the request object
+      req.user = user;
+      next(); // Proceed to the next middleware or route handler
+    });
+  } catch (err) {
+    console.error("Error in verifyToken middleware:", err);
+    res.status(500).send({
+      message: "Internal server error in token verification",
+    });
+  }
+};
+
+// Export the middleware functions
+module.exports = {
+  verifySignupBody,
+  verifySignInBody,
+  verifyToken,
+};

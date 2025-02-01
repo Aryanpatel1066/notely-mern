@@ -28,30 +28,8 @@ db.on('error', () => {
 });
 db.once('open', () => {
     console.log("Database connected successfully...");
-    init();
-});
-
-// Function to create an admin user if it doesn't exist
-async function init() {
-    try {
-        const adminUser = await user_model.findOne({ email: 'aryanpatel1248@gmail.com' });
-        if (adminUser) {
-            console.log("Admin user already exists...");
-            return;
-        }
-        
-        // Create the admin user
-        const newAdminUser = await user_model.create({
-            name: 'aryan',
-            email: 'aryanpatel1248@gmail.com',
-            userType: 'admin',
-            password: bcrypt.hashSync('aryan123', 8)
-        });
-        console.log("Admin user created:", newAdminUser);
-    } catch (err) {
-        console.log("Error while creating admin:", err);
-    }
-}
+ });
+ 
 
 // Basic route to test the backend
 app.get("/", (req, res) => {
