@@ -17,10 +17,17 @@ function Register() {
 
         try {
             const response = await apiService.post("auth/signup", { name, email, password });
+         console.log(response)
+         const user = response.data.user;  // This should give you the user object
+         const userId = user.id;   
+         localStorage.setItem("userId", userId);
+
+         console.log("userId:", userId); 
             setMessage("Register successful!"); // Directly set the success message
             setName("");
             setEmail("");
             setPassword("");
+            navigate('/login')
         } catch (err) {
             setError(err.response?.data?.message || "Register failed, something went wrong.");
             setMessage(""); // Clear the success message if there was an error
