@@ -9,8 +9,8 @@ const cors = require('cors');
 
 // CORS configuration with explicit settings
 const corsOptions = {
-    origin: "http://localhost:5173",  // Replace this with your frontend URL if different
-    methods: ["GET", "POST", "PUT", "DELETE"],  // Adjust as per your requirement
+    origin: "http://localhost:5173",  
+    methods: ["GET", "POST", "PUT", "DELETE"],   
     allowedHeaders: ["Content-Type", "Authorization"],  // Allow the required headers
 };
 

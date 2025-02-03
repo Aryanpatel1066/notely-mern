@@ -4,51 +4,49 @@ const mongoose = require("mongoose");
 
 exports.todoCreation = async (req, res) => {
   try {
-    const { title, description } = req.body;
+    const { title, description, status } = req.body;
 
-    if (!title || title.trim() === "") {
-      return res.status(400).send({
-        message: "Todo title is required",
-      });
+    // Validate required fields
+    if (!title?.trim()) {
+      return res.status(400).json({ message: "Todo title is required" });
     }
 
-    if (!description || description.trim() === "") {
-      return res.status(400).send({
-        message: "Todo description is required",
-      });
+    // Validate status if provided
+    const validStatuses = ["ToDo", "In Progress", "Completed"];
+    if (status && !validStatuses.includes(status)) {
+      return res.status(400).json({ message: "Invalid status value" });
     }
 
-    const userId = req.params.userId; // Get `userId` from URL params
+    const userId = req.user?.id || req.params.userId; // Use from auth or params
+    console.log("Received userId:", userId);  // Log the userId to ensure it's correct
 
     // Check if the user exists
-    const user = await user_model.findById(userId);
-    if (!user) {
-      return res.status(404).send({ message: "User not found" });
+    const userExists = await user_model.exists({ _id: userId });
+    if (!userExists) {
+      return res.status(404).json({ message: "User not found" });
     }
 
-    // Create and save the todo
+    // Create the todo
     const newTodo = await todo_model.create({
       title,
-      description,
-      userId, // Use userId from the URL
+      description: description?.trim() || " ",
+      status: status || "ToDo",
+      userId,
     });
 
-    res.status(201).send({
+    res.status(201).json({
       message: "Todo successfully created!",
       data: newTodo,
     });
   } catch (err) {
     console.error("Error while creating todo:", err);
-    res.status(500).send({
-      message: "Error while creating todo",
-      error: err.message,
-    });
+    res.status(500).json({ message: "Server error", error: err.message });
   }
 };
 
 exports.getAllTodo = async (req, res) => {
   try {
-    const { userId } = req.params; // Extract `userId` from the URL
+    const { userId } = req.params;
 
     // Validate the `userId`
     if (!mongoose.Types.ObjectId.isValid(userId)) {
@@ -58,14 +56,10 @@ exports.getAllTodo = async (req, res) => {
     // Fetch all todos associated with the `userId`
     const todos = await todo_model.find({ userId });
 
-    // Check if no todos are found
-    if (todos.length === 0) {
-      return res.status(404).send({ message: "No todos found for the given userId" });
-    }
-
+    // Always return a 200 response with an empty array if no todos found
     res.status(200).send({
       message: "Todos fetched successfully",
-      todos,
+      todos: todos || [],  // Ensure always sending an empty array if no todos exist
     });
   } catch (err) {
     console.error("Error while fetching todos:", err);

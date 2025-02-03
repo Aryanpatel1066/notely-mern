@@ -21,6 +21,7 @@ exports.signup = async (req, res) => {
 
     // Step 4: Create response object, exclude password
     const res_obj = {
+      id: user_created._id,
       name: user_created.name,
        email: user_created.email,
        createdAt: user_created.createdAt,
