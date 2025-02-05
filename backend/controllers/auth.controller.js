@@ -73,6 +73,7 @@ exports.signin = async (req, res) => {
     res.status(200).send({
       name: user.name,
       email: user.email,
+      userId:user._id,
        accessToken: token,
     });
   } catch (err) {
