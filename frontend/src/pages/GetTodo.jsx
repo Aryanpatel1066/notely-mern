@@ -1,23 +1,43 @@
 import { useState, useEffect } from "react";
 import { FaEdit, FaTrash } from "react-icons/fa";
+import { toast, ToastContainer,Bounce } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import apiService from "../api/apiservices";
 
 function GetTodo() {
   const [todos, setTodos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [editingTodo, setEditingTodo] = useState(null); // Track todo being edited
+  const [editingTodo, setEditingTodo] = useState(null);
   const [formData, setFormData] = useState({ title: "", description: "", status: "" });
-  const userId = localStorage.getItem("userId");
+
+  const userId = localStorage.getItem("userId") || ""; // Ensure userId is not undefined
 
   useEffect(() => {
     const fetchTodos = async () => {
+      const storedUserId = localStorage.getItem("userId"); // Ensure fresh userId retrieval
+
+      if (!storedUserId) {
+        setError("User ID not found. Please log in.");
+        setLoading(false);
+        return;
+      }
+
       try {
-        const response = await apiService.get(`/todo/${userId}`);
+        const response = await apiService.get(`/todo/${storedUserId}`);
         setTodos(response.data.todos || []);
       } catch (error) {
         setError("Error fetching todos.");
-        console.error("Error fetching todos:", error);
+        toast.error(`"error featching todo"}`, {
+          position: "top-right",
+          autoClose:2000,
+          hideProgressBar:false,
+          closeOnClick:true,
+          pauseOnHover:false,
+          draggable:true,
+          theme:"light",
+          transition:Bounce,
+        });
       } finally {
         setLoading(false);
       }
@@ -30,16 +50,9 @@ function GetTodo() {
       setLoading(false);
     }
 
-    // Poll every 5 seconds
-    const interval = setInterval(() => {
-      if (userId) {
-        fetchTodos(); // Call the fetchTodos function to refresh the todo list
-      }
-    }, 5000);
-
-    // Cleanup the interval when the component unmounts
+    const interval = setInterval(fetchTodos, 5000);
     return () => clearInterval(interval);
-  }, [userId]);
+  }, []);
 
   const getStatusColor = (status) => {
     switch (status) {
@@ -54,36 +67,70 @@ function GetTodo() {
     }
   };
 
-  // Delete Function
   const handleDelete = async (id) => {
     try {
       await apiService.delete(`/todo/${id}`);
       setTodos(todos.filter((todo) => todo._id !== id));
+      toast.error(`✅"todo delete successfully"}`, {
+        position: "top-right",
+        autoClose:2000,
+        hideProgressBar:false,
+        closeOnClick:true,
+        pauseOnHover:false,
+        draggable:true,
+        theme:"light",
+        transition:Bounce,
+      });
     } catch (error) {
-      console.error("Error deleting todo:", error);
+      toast.error(`❌"error deleting todo!"`, {
+        position: "top-right",
+        autoClose:2000,
+        hideProgressBar:false,
+        closeOnClick:true,
+        pauseOnHover:false,
+        draggable:true,
+        theme:"light",
+        transition:Bounce,
+      });
     }
   };
 
-  // Open Edit Form
   const openEditForm = (todo) => {
     setEditingTodo(todo);
     setFormData({ title: todo.title, description: todo.description, status: todo.status });
   };
 
-  // Handle Input Change
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // Update Todo
   const handleUpdate = async (e) => {
     e.preventDefault();
     try {
       const response = await apiService.put(`/todo/${editingTodo._id}`, formData);
       setTodos(todos.map((todo) => (todo._id === editingTodo._id ? response.data.data : todo)));
       setEditingTodo(null);
+       toast.success(`✅"Todo updated successfully!"`, {
+        position: "top-right",
+        autoClose:2000,
+        hideProgressBar:false,
+        closeOnClick:true,
+        pauseOnHover:false,
+        draggable:true,
+        theme:"light",
+        transition:Bounce,
+      });
     } catch (error) {
-      console.error("Error updating todo:", error);
+       toast.error(`❌"Error updating todo!"`, {
+        position: "top-right",
+        autoClose:2000,
+        hideProgressBar:false,
+        closeOnClick:true,
+        pauseOnHover:false,
+        draggable:true,
+        theme:"light",
+        transition:Bounce,
+      });
     }
   };
 
@@ -92,10 +139,10 @@ function GetTodo() {
   if (todos.length === 0) return <p className="text-center text-lg font-semibold">No todos created yet.</p>;
 
   return (
-    <div className="max-w-2xl mx-auto p-4">
+    <div className="max-w-6xl mx-auto p-4">
       <h2 className="text-2xl font-bold mb-4 text-center">List of Todos</h2>
-      <ul className="space-y-4">
-        {todos.map((todo) => (
+      <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
+         {todos.map((todo) => (
           <li key={todo._id} className="border rounded-lg p-4 shadow-md bg-white">
             <div className="flex justify-between items-center mb-2">
               <h3 className="text-xl font-semibold">{todo.title}</h3>
@@ -122,7 +169,6 @@ function GetTodo() {
         ))}
       </ul>
 
-      {/* Edit Form (Only shows when editingTodo is set) */}
       {editingTodo && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
@@ -168,6 +214,8 @@ function GetTodo() {
           </div>
         </div>
       )}
+
+      <ToastContainer position="top-right" autoClose={2000} hideProgressBar={false} closeOnClick pauseOnHover={false} draggable theme="light" />
     </div>
   );
 }

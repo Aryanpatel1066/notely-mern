@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { NavLink, useNavigate } from "react-router-dom";
 import apiService from "../api/apiservices";
 
@@ -6,31 +8,50 @@ function Register() {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [message, setMessage] = useState("");
-    const [error, setError] = useState("");
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
-        e.preventDefault(); // Fixed e.prevent.default() to e.preventDefault()
-        setError(""); // Clear previous error message
-        setMessage(""); // Clear previous success message
+        e.preventDefault();
 
         try {
             const response = await apiService.post("auth/signup", { name, email, password });
-         console.log(response)
-         const user = response.data.user;  // This should give you the user object
-         const userId = user.id;   
-         localStorage.setItem("userId", userId);
+            console.log(response);
+            const user = response.data.user;
+            const userId = user.id;   
+            localStorage.setItem("userId", userId);
 
-         console.log("userId:", userId); 
-            setMessage("Register successful!"); // Directly set the success message
+            console.log("userId:", userId); 
+
+            // ✅ Show success toast
+            toast.success("✅ Registration successful!", {
+                position: "top-right",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: false,
+                draggable: true,
+                theme: "light",
+            });
+
             setName("");
             setEmail("");
             setPassword("");
-            navigate('/login')
+
+            // Redirect after 2 seconds
+            setTimeout(() => {
+                navigate('/login');
+            }, 2000);
         } catch (err) {
-            setError(err.response?.data?.message || "Register failed, something went wrong.");
-            setMessage(""); // Clear the success message if there was an error
+            // ❌ Show error toast
+            toast.error(`❌ ${err.response?.data?.message || "Registration failed!"}`, {
+                position: "top-right",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: false,
+                draggable: true,
+                theme: "light",
+            });
         }
     };
 
@@ -39,8 +60,6 @@ function Register() {
             <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-sm">
                 <h2 className="text-2xl font-bold text-center mb-6">Register</h2>
                 <form onSubmit={handleSubmit}>
-                {message && <p className="mt-4 text-green-600">{message}</p>}
-                {error && <p className="mt-4 text-red-600">{error}</p>}
                     <div className="mb-4">
                         <label htmlFor="username" className="block text-gray-700 font-semibold">
                             Username
@@ -93,10 +112,27 @@ function Register() {
                         Register
                     </button>
 
-                <NavLink className="text-blue-500 hover:text-blue-700 "to="/login">Allredy have account ?</NavLink>    
-                   
+                    <div className="mt-4 text-center">
+                        <NavLink to="/login" className="text-blue-500 hover:text-blue-700">
+                            Already have an account?
+                        </NavLink>    
+                    </div>
                 </form>
             </div>
+
+            {/* Toast Container */}
+            <ToastContainer
+                position="top-right"
+                autoClose={2000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover={false}
+                theme="light"
+            />
         </div>
     );
 }

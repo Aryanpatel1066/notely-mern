@@ -1,44 +1,62 @@
 import { useState } from "react";
+import { toast, ToastContainer, Bounce } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import apiService from "../api/apiservices";
 import { NavLink, useNavigate } from "react-router-dom";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [message, setMessage] = useState("");
-  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(""); // Clear previous error message
-    setMessage(""); // Clear previous success message
+    
     try {
-      const response = await apiService.post("auth/signin", {
-        email,
-        password,
+      const response = await apiService.post("/auth/signin", { email, password });
+
+      console.log("API Response:", response.data); // Debugging response
+      
+      const { name, userId, message } = response.data;
+
+      if (!userId) {
+        throw new Error("Invalid login response: userId missing");
+      }
+
+      // ✅ Store correct values
+      localStorage.setItem("userId", userId);
+      localStorage.setItem("user", JSON.stringify({ name, email }));
+
+      toast.success(`✅ ${message || "Login successful!"}`, {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        theme: "light",
+        transition: Bounce,
       });
-      const { name, accessToken, message } = response.data;
 
-      localStorage.setItem("token", accessToken); // Store token in localStorage
-      localStorage.setItem("user", JSON.stringify({ name, email })); // Store user info in localStorage
-
-      console.log("Token:", accessToken);
-      console.log("User:", { name, email });
-      console.log("Message:", message);
-
-      setMessage(message || "Login successful!");
-      setError(""); // Clear any existing error
       setEmail("");
       setPassword("");
-      navigate("/dashboard"); // Corrected to use navigate function
+
+      setTimeout(() => {
+        navigate("/dashboard");
+      }, 2000);
+      
     } catch (err) {
-      console.error("Login failed:", err);
-      setError(
-        err.response?.data?.message ||
-          "Login failed. Please check your credentials."
-      ); // Use backend error message or default
-      setMessage(""); // Clear any existing success message
+      console.error("Login Error:", err.response?.data || err.message);
+      toast.error(`❌ ${err.response?.data?.message || "Login failed!"}`, {
+        position: "top-right",
+        autoClose:2000,
+        hideProgressBar:false,
+        closeOnClick:true,
+        pauseOnHover:false,
+        draggable:true,
+        theme:"light",
+        transition:Bounce,
+      });
     }
   };
 
@@ -48,10 +66,7 @@ function Login() {
         <h2 className="text-2xl font-bold text-center mb-6">Login</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label
-              htmlFor="email"
-              className="block text-gray-700 font-semibold"
-            >
+            <label htmlFor="email" className="block text-gray-700 font-semibold">
               Email
             </label>
             <input
@@ -66,10 +81,7 @@ function Login() {
           </div>
 
           <div className="mb-4">
-            <label
-              htmlFor="password"
-              className="block text-gray-700 font-semibold"
-            >
+            <label htmlFor="password" className="block text-gray-700 font-semibold">
               Password
             </label>
             <input
@@ -91,15 +103,27 @@ function Login() {
           </button>
         </form>
 
-        {message && <p className="mt-4 text-green-600">{message}</p>}
-        {error && <p className="mt-4 text-red-600">{error}</p>}
-
         <div className="mt-4 text-center">
           <NavLink to="/register" className="text-blue-500 hover:text-blue-700">
             Don't have an account?
           </NavLink>
         </div>
       </div>
+
+      {/* Toast Container */}
+      <ToastContainer
+        position="top-right"
+        autoClose={2000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover={false}
+        theme="light"
+        transition={Bounce}
+      />
     </div>
   );
 }

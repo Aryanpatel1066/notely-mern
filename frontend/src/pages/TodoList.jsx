@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import apiService from '../api/apiservices'; // Make sure this file handles the API requests
+import apiService from '../api/apiservices';  
+import { toast, ToastContainer,Bounce } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function TodoList({ onTodoAdded }) {
   const [title, setTitle] = useState("");  // For storing title of the todo
@@ -32,8 +34,18 @@ function TodoList({ onTodoAdded }) {
 
       // Check if the response message is success
       if (response.data.message === "Todo successfully created!") {
-        setMessage("Todo created successfully!");
-        onTodoAdded(response.data.data); // Optionally pass new todo to parent component (if needed)
+        // setMessage("Todo created successfully!");
+        onTodoAdded(response.data.data); //  
+        toast.success(`✅"Todo succeessfully created ! "`, {
+          position: "top-right",
+          autoClose:2000,
+          hideProgressBar:false,
+          closeOnClick:true,
+          pauseOnHover:false,
+          draggable:true,
+          theme:"light",
+          transition:Bounce,
+        });
       }
 
       // Reset the form inputs
@@ -42,15 +54,25 @@ function TodoList({ onTodoAdded }) {
       setStatus("ToDo");
     } catch (error) {
       console.error("Error adding todo:", error);
-      setMessage("Error while adding todo: " + error.message);
+      // setMessage("Error while adding todo: " + error.message);
+      toast.error(`❌${error.message}"error while creating todo"`, {
+        position: "top-right",
+        autoClose:2000,
+        hideProgressBar:false,
+        closeOnClick:true,
+        pauseOnHover:false,
+        draggable:true,
+        theme:"light",
+        transition:Bounce,
+      });
     } finally {
-      setIsLoading(false);  // Set loading state to false after request is completed
+      setIsLoading(false); 
     }
   };
 
   return (
     <div>
-      <h2 className="text-2xl font-bold mb-4">Add Todo</h2>
+      
       
       {/* Display the success or error message */}
       {message && (
