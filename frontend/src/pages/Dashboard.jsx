@@ -1,16 +1,32 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import TodoList from "./TodoList";
 import GetTodo from "./GetTodo";
 import Navbar from "../components/Navbar";
 
 function Dashboard() {
+  const navigate = useNavigate();
   const [todos, setTodos] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  // Check if user is logged in
+  useEffect(() => {
+    const user = localStorage.getItem("user"); // Assuming you store user info in localStorage
+    if (!user) {
+      navigate("/login"); // Redirect to login if not authenticated
+    } else {
+      setIsAuthenticated(true);
+    }
+  }, [navigate]);
 
   const handleTodoAdded = (newTodo) => {
     setTodos((prevTodos) => [...prevTodos, newTodo]);
     setIsModalOpen(false); // Close modal after adding todo
   };
+
+  // Show nothing until authentication check is done
+  if (!isAuthenticated) return null;
 
   return (
     <div className="relative min-h-screen">
@@ -21,7 +37,7 @@ function Dashboard() {
       <button
         onClick={() => setIsModalOpen(true)}
         className="fixed bottom-6 right-6 bg-blue-500 text-white p-4 rounded-full shadow-lg text-3xl hover:bg-white hover:text-blue-500 transition-all duration-300 w-14 h-14 flex items-center justify-center border-2 border-blue-500 hover:border-blue-500"
->
+      >
         +
       </button>
 

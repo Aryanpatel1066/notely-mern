@@ -7,6 +7,7 @@ import Dashbord from "../pages/Dashboard";
 import Home from "../pages/Home";
 import Register from "../pages/Register";
 import NotFound from "../pages/NotFound";
+import Profile from "../pages/Profile"; 
 function Router() {
   return (
     <>
@@ -18,6 +19,7 @@ function Router() {
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/Dashboard" element={<Dashbord />} />
+        <Route path="/profile" element={<Profile/>}/>
       </Routes>
     </>
   );
