@@ -1,14 +1,8 @@
 import React from "react";
-import { motion } from "framer-motion";
 
 function News() {
   return (
-    <motion.section
-      initial={{ opacity: 0, y: "100%" }}
-      whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 1.5 }}
-      className="container mx-auto text-center mt-10 p-5"
-    >
+    <section className="container mx-auto text-center mt-10 p-5">
       <h1 className="text-3xl md:text-5xl font-bold font-chakra">Join Our Newsletter</h1>
       <p className="text-xl md:text-2xl font-semibold mt-2">Sign up for our email newsletter to get updates and more.</p>
       <div className="mt-4 flex flex-col md:flex-row justify-center items-center gap-3">
@@ -21,10 +15,8 @@ function News() {
           Subscribe
         </button>
       </div>
-    </motion.section>
+    </section>
   );
 }
 
-
-
-export  default News;
+export default News;

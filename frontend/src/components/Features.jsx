@@ -1,5 +1,4 @@
 import React from "react";
-import { motion } from "framer-motion";
 import add from "../assets/Add.png";
 import read from "../assets/Read.png";
 import check from "../assets/Check.png";
@@ -43,23 +42,20 @@ function Features() {
   return (
     <div className="overflow-hidden py-10">
       {featuresData.map((feature, index) => (
-        <motion.div
+        <div
           key={index}
-          initial={{ opacity: 0, x: feature.reverse ? "100%" : "-100%" }}
-          whileInView={{ opacity: 1, x: 0 }}
-          transition={{ duration: 1.5, delay: index * 0.1 }}
           className={`flex flex-wrap items-center justify-center gap-6 p-4 text-center md:text-start ${
             feature.reverse ? "flex-row-reverse" : ""
           }`}
         >
           <div className="w-72 md:w-96">
-            <img className="w-56 md:w-80 mx-auto" src={feature.img} alt={feature.title} />
+            <img className="w-56 md:w-80 mx-auto" src={feature.img} alt={feature.title} loading="lazy" />
           </div>
           <div className="max-w-lg text-center md:text-start">
             <h2 className="text-2xl md:text-4xl font-bold text-[#3368C0]">{feature.title}</h2>
             <p className="text-lg text-gray-700 mt-2">{feature.description}</p>
           </div>
-        </motion.div>
+        </div>
       ))}
     </div>
   );

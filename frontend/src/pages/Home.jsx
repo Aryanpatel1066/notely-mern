@@ -11,7 +11,7 @@ function Home(){
         <Hero/>
         <Stats/>
         <Features/>
-        <News/>
+        {/* <News/> */}
         <Footer/>
           </>
     )

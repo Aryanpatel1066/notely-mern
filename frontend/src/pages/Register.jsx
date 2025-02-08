@@ -3,7 +3,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { NavLink, useNavigate } from "react-router-dom";
 import apiService from "../api/apiservices";
-
+import Navbar from "../components/Navbar";
 function Register() {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
@@ -56,6 +56,8 @@ function Register() {
     };
 
     return (
+        <>
+        <Navbar/>
         <div className="flex justify-center items-center h-screen bg-gray-100">
             <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-sm">
                 <h2 className="text-2xl font-bold text-center mb-6">Register</h2>
@@ -134,6 +136,7 @@ function Register() {
                 theme="light"
             />
         </div>
+        </>
     );
 }
 

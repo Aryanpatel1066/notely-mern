@@ -15,25 +15,37 @@ function Navbar() {
 
   return (
     <div className="navbarComponent">
-      <div className="logo">Notely</div>
+      <div className="logo"><NavLink to="/">Notely</NavLink></div>
       <ul className="navLinks">
         <li>
-          <NavLink to="/" className="navLink">
+          <NavLink 
+            to="/" 
+            className={({ isActive }) => isActive ? "navLink active" : "navLink"}
+          >
             Home
           </NavLink>
         </li>
         <li>
-          <NavLink to="/dashboard" className="navLink">
+          <NavLink 
+            to="/dashboard" 
+            className={({ isActive }) => isActive ? "navLink active" : "navLink"}
+          >
             Dashboard
           </NavLink>
         </li>
         <li>
-          <NavLink to="/about" className="navLink">
+          <NavLink 
+            to="/about" 
+            className={({ isActive }) => isActive ? "navLink active" : "navLink"}
+          >
             About
           </NavLink>
         </li>
         <li>
-          <NavLink to="/contact" className="navLink">
+          <NavLink 
+            to="/contact" 
+            className={({ isActive }) => isActive ? "navLink active" : "navLink"}
+          >
             Contact
           </NavLink>
         </li>

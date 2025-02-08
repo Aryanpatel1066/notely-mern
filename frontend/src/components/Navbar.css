@@ -34,10 +34,14 @@
     border-radius: 4px;
     transition: background-color 0.3s;
 }
-
+.navLink.active{
+    color:#3368c0;
+    font-weight: bold;
+  border-bottom: 2px solid white;
+}
 .navLink:hover {
-    background-color: #3368c0;
-    color:white;
+    /* background-color: #3368c0; */
+    color:#3368c0;
 }
 
 .activeLink {

@@ -3,7 +3,7 @@ import { toast, ToastContainer, Bounce } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import apiService from "../api/apiservices";
 import { NavLink, useNavigate } from "react-router-dom";
-
+import Navbar from "../components/Navbar"
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -61,7 +61,9 @@ function Login() {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen bg-gray-100">
+    <>   
+     <Navbar/>
+     <div className="flex justify-center items-center h-screen bg-gray-100">
       <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-sm">
         <h2 className="text-2xl font-bold text-center mb-6">Login</h2>
         <form onSubmit={handleSubmit}>
@@ -125,6 +127,8 @@ function Login() {
         transition={Bounce}
       />
     </div>
+    </>
+
   );
 }
 
