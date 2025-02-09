@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { FaEdit, FaTrash, FaSearch } from "react-icons/fa";
+import { FaEdit, FaTrash, FaSearch,FaClipboard } from "react-icons/fa";
 import { toast, ToastContainer, Bounce } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import apiService from "../api/apiservices";
@@ -157,7 +157,14 @@ function GetTodo() {
 
   if (loading) return <p className="text-center text-lg font-semibold">Loading todos...</p>;
   if (error) return <p className="text-red-500 text-center">{error}</p>;
-
+  const handleCopy = (title, description) => {
+    const textToCopy = `Title: ${title}\nDescription: ${description}`;
+    navigator.clipboard.writeText(textToCopy).then(() => {
+      toast.success("✅ Copied to clipboard!", { position: "top-right", autoClose: 2000, transition: Bounce });
+    }).catch(() => {
+      toast.error("❌ Failed to copy!", { position: "top-right", autoClose: 2000, transition: Bounce });
+    });
+  };
   return (
     <div className="max-w-6xl mx-auto p-4">
       <div className="flex justify-between mb-4">
@@ -224,6 +231,9 @@ function GetTodo() {
                 <button onClick={() => handleDelete(todo._id)} className="text-red-500">
                   <FaTrash size={20} />
                 </button>
+                <button onClick={() => handleCopy(todo.title, todo.description)} className="text-green-500">
+                  <FaClipboard size={20} />
+                  </button>
               </div>
             </li>
           ))}

@@ -30,12 +30,7 @@ const featuresData = [
     img: del,
     reverse: true,
   },
-  {
-    title: "Pin Tasks for Quick Access",
-    description: "Keep your most important tasks front and center by pinning them to the top.",
-    img: pin,
-    reverse: false,
-  },
+   
 ];
 
 function Features() {

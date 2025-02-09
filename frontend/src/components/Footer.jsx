@@ -1,4 +1,5 @@
 import "../index.css"
+import NotelyLogo from "../assets/Notely2.png"
 function Footer() {
     return (
     <div className="boundary">
@@ -24,7 +25,7 @@ function Footer() {
   
           {/* Right Section - Branding */}
           <div className="mt-6 md:mt-0">
-            <h1 className="text-3xl md:text-5xl font-bold font-pacifico">Notely</h1>
+            <img src={NotelyLogo} className="h-20 w-auto transition-transform duration-300 hover:scale-110" alt="Notely Logo"/>
             <p className="text-sm md:text-lg mt-2">&copy; 2025 Notely. All rights reserved.</p>
           </div>
         </div>
