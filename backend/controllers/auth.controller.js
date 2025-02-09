@@ -83,3 +83,11 @@ exports.signin = async (req, res) => {
     });
   }
 };
+exports.auth=async(req,res)=>{
+  try{
+
+  }
+  catch(err){
+    console.log(err)
+  }
+}
