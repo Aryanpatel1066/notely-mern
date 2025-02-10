@@ -8,6 +8,9 @@ import Home from "../pages/Home";
 import Register from "../pages/Register";
 import NotFound from "../pages/NotFound";
 import Profile from "../pages/Profile"; 
+import ResetPassword from "../pages/ResetPassword";
+import ForgotPassword from "../pages/ForgotPassword"
+import VerifyOtp from "../pages/VerifyOtp"; 
 function Router() {
   return (
     <>
@@ -20,6 +23,9 @@ function Router() {
         <Route path="/contact" element={<Contact />} />
         <Route path="/Dashboard" element={<Dashbord />} />
         <Route path="/profile" element={<Profile/>}/>
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/verify-otp" element={<VerifyOtp />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
       </Routes>
     </>
   );

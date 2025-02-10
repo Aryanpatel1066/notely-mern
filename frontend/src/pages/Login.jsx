@@ -110,6 +110,11 @@ function Login() {
             Don't have an account?
           </NavLink>
         </div>
+        <div className="mt-4 text-center">
+          <NavLink to="/forgot-password" className="text-blue-500 hover:text-blue-700">
+            forget password?
+          </NavLink>
+        </div>
       </div>
 
       {/* Toast Container */}
