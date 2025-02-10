@@ -39,7 +39,7 @@ app.get("/", (req, res) => {
 // Import routes
 require("./routes/auth.route")(app);
 require("./routes/todo.route")(app);
-app.use("/api/email", require("./routes/email.route"));
+  require("./routes/email.route")(app);
 
 // Handle preflight requests (OPTIONS requests)
 app.options('*', cors(corsOptions));  // Allow preflight requests globally

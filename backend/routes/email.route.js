@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const emailController = require('../controllers/email.controller');
-
-router.post('/send-otp', emailController.sendOTP);
-router.post('/verify-otp', emailController.verifyOTP);
-router.post('/reset-password', emailController.resetPassword);
-
-module.exports = router;
+module.exports=(app)=>{
+app.post('/todoApp/api/v1/send-otp', emailController.sendOTP);
+app.post('/todoApp/api/v1/verify-otp', emailController.verifyOTP);
+app.post('/todoApp/api/v1/reset-password', emailController.resetPassword);
+}
+ 

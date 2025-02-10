@@ -38,10 +38,13 @@ exports.sendOTP = async (req, res) => {
 };
 
 exports.verifyOTP = async (req, res) => {
-    const { email, otp } = req.body;
+    const {  otp } = req.body;
+  if(!otp){
+    return res.status(400).json({ message: "OTP is required" });
 
+  }
     try {
-        const user = await User.findOne({ email, otp });
+        const user = await User.findOne({  otp });
         if (!user || user.otpExpires < Date.now()) {
             return res.status(400).json({ message: "Invalid or expired OTP" });
         }
@@ -54,10 +57,10 @@ exports.verifyOTP = async (req, res) => {
 };
 
 exports.resetPassword = async (req, res) => {
-    const { email, otp, newPassword } = req.body;
+    const {    otp, newPassword } = req.body;
 
     try {
-        const user = await User.findOne({ email, otp });
+        const user = await User.findOne({  otp });
         if (!user || user.otpExpires < Date.now()) {
             return res.status(400).json({ message: "Invalid or expired OTP" });
         }
