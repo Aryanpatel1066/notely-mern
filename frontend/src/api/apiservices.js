@@ -2,7 +2,7 @@
 import axios from 'axios';
 
 const apiService = axios.create({
-  baseURL: 'http://localhost:2810/todoApp/api/v1', // Replace with your backend URL
+  baseURL: 'https://notely-mernb.onrender.com/todoApp/api/v1', // Replace with your backend URL
   headers: {
     'Content-Type': 'application/json',
   },
