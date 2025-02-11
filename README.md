@@ -1,4 +1,4 @@
-# <p align="center" style="color: "red";">Notely is the first step to making dreams a reality.</p>
+# <p align="center">Notely is the first step to making dreams a reality.</p>
 
 ## 📌 Introduction
 Notely is a modern note-taking web application designed to help users organize and manage their notes efficiently. It offers a sleek UI, authentication, and essential CRUD operations for creating, updating, and deleting notes.
