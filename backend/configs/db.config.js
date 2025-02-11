@@ -1,5 +1,5 @@
 module.exports = {
     db_name: "todoApp",
-    db_url: "mongodb+srv://aryanpatel1248:frRd0cCzkv1pS2pl@cluster0.i2ouh.mongodb.net/todoApp?retryWrites=true&w=majority"
+    db_url: 'mongodb+srv://aryandev1066:jC98HrcyFt01M82M@cluster0.prdlr.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0'
 }
 //    db_url:"mongodb://localhost/todoApp"
