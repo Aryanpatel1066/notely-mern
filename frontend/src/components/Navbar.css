@@ -1,80 +1,92 @@
- /* Base styles */
- *{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
- }
+ /* Navbar.css */
+
 .navbarComponent {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 1rem 2rem;
-    background-color:#BDD6FF;
+    background-color: #BDD6FF;
     color: #3368c0;
     font-family: Arial, sans-serif;
-}
-
-.logo {
+    /* border: 2px solid red; */
+  }
+  @media (max-width:272px) {
+    .navbarComponent{
+        /* border:2px solid green; */
+        gap:10px;
+        justify-content: space-between;
+    }
+  }
+  .logo {
     font-size: 1.5rem;
     font-weight: bold;
-}
-
-.navLinks {
+  }
+  
+  .navLinks {
     list-style-type: none;
     display: flex;
     gap: 1rem;
     padding: 0;
     margin: 0;
-}
-
-.navLink {
+  }
+  
+  .navLink {
     color: black;
     text-decoration: none;
     padding: 0.5rem 1rem;
     border-radius: 4px;
     transition: background-color 0.3s;
-}
-.navLink.active{
-    color:#3368c0;
+  }
+  
+  .navLink.active {
+    color: #3368c0;
     font-weight: bold;
-  border-bottom: 2px solid white;
-}
-.navLink:hover {
-    /* background-color: #3368c0; */
-    color:#3368c0;
-}
-
-.activeLink {
-    background-color: #4dd0e1;
-}
-
-.loginButton {
+    border-bottom: 2px solid white;
+  }
+  
+  .navLink:hover {
+    color: #3368c0;
+  }
+  
+  .loginButton {
     color: #fff;
     background-color: #3368c0;
     text-decoration: none;
     padding: 0.5rem 1rem;
     border-radius: 4px;
     transition: background-color 0.3s;
-}
-
-.loginButton:hover {
+  }
+  
+  .loginButton:hover {
     background-color: #1966e3;
-}
-
-/* Responsive styles */
-@media (max-width: 768px) {
-    .navbarComponent {
-        flex-direction: column;
-        align-items: flex-start;
+  }
+  
+  .hamburger {
+    display: none;
+    cursor: pointer;
+  }
+  
+  @media (max-width: 768px) {
+    .hamburger {
+      display: block;
     }
-
+    
     .navLinks {
-        flex-direction: column;
-        width: 100%;
+      display: none;
+      flex-direction: column;
+      position: absolute;
+      top: 60px;
+      right: 0;
+      background-color: #BDD6FF;
+      width: 100%;
+      padding: 1rem 0;
+      text-align: center;
     }
-
-    .navLink, .loginButton {
-        width: 100%;
-        text-align: center;
+    
+    .navLinks.open {
+      display: flex;
+      border:2px solid red;
+      margin: 2rem 0;
     }
-}
+  }
+  

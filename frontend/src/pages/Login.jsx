@@ -3,11 +3,18 @@ import { toast, ToastContainer, Bounce } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import apiService from "../api/apiservices";
 import { NavLink, useNavigate } from "react-router-dom";
-import Navbar from "../components/Navbar"
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+import Navbar from "../components/Navbar";
+
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -15,7 +22,7 @@ function Login() {
     try {
       const response = await apiService.post("/auth/signin", { email, password });
 
-      console.log("API Response:", response.data); // Debugging response
+      console.log("API Response:", response.data); 
       
       const { name, userId, message } = response.data;
 
@@ -23,7 +30,6 @@ function Login() {
         throw new Error("Invalid login response: userId missing");
       }
 
-      // ✅ Store correct values
       localStorage.setItem("userId", userId);
       localStorage.setItem("user", JSON.stringify({ name, email }));
 
@@ -49,13 +55,13 @@ function Login() {
       console.error("Login Error:", err.response?.data || err.message);
       toast.error(`❌ ${err.response?.data?.message || "Login failed!"}`, {
         position: "top-right",
-        autoClose:2000,
-        hideProgressBar:false,
-        closeOnClick:true,
-        pauseOnHover:false,
-        draggable:true,
-        theme:"light",
-        transition:Bounce,
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        theme: "light",
+        transition: Bounce,
       });
     }
   };
@@ -82,19 +88,28 @@ function Login() {
             />
           </div>
 
-          <div className="mb-4">
+          <div className="mb-4 relative">
             <label htmlFor="password" className="block text-gray-700 font-semibold">
               Password
             </label>
-            <input
-              type="password"
-              id="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Password"
-              required
-              className="mt-2 p-2 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                id="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Password"
+                required
+                className="mt-2 p-2 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 pr-10"
+              />
+              <button
+                type="button"
+                className="absolute right-2 top-3 text-gray-600"
+                onClick={togglePasswordVisibility}
+              >
+                {showPassword ? <FaEye /> : <FaEyeSlash />}
+              </button>
+            </div>
           </div>
 
           <button
@@ -112,12 +127,11 @@ function Login() {
         </div>
         <div className="mt-4 text-center">
           <NavLink to="/forgot-password" className="text-blue-500 hover:text-blue-700">
-            forget password?
+            Forgot password?
           </NavLink>
         </div>
       </div>
 
-      {/* Toast Container */}
       <ToastContainer
         position="top-right"
         autoClose={2000}
@@ -133,7 +147,6 @@ function Login() {
       />
     </div>
     </>
-
   );
 }
 
