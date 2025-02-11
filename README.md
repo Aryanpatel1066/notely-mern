@@ -1,4 +1,4 @@
-# Notely App
+# <p align="center" style="color: red;">Notely is the first step to making dreams a reality.</p>
 
 ## 📌 Introduction
 Notely is a modern note-taking web application designed to help users organize and manage their notes efficiently. It offers a sleek UI, authentication, and essential CRUD operations for creating, updating, and deleting notes.
@@ -44,7 +44,6 @@ node server.js
 ## 🤝 Contributing
 We welcome contributions! Feel free to submit pull requests or open issues.
 
- ## Notely is the first step to making dreams a reality.
 
 
 ---
