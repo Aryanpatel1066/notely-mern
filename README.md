@@ -41,6 +41,9 @@ node server.js
 - **Backend**: Render / Heroku
 - **Database**: MongoDB Atlas
 
+## visit 
+https://notely-mern.vercel.app/
+
 ## 🤝 Contributing
 We welcome contributions! Feel free to submit pull requests or open issues.
 
