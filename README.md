@@ -28,7 +28,7 @@ cd notely
 npm install
 
 # Start the frontend (React)
-npm start
+npm run dev
 
 # Start the backend (Express)
 cd backend
@@ -41,7 +41,7 @@ node server.js
 - **Backend**: Render / Heroku
 - **Database**: MongoDB Atlas
 
-## visit 
+## 🔗 visit 
 https://notely-mern.vercel.app/
 
 ## 🤝 Contributing
